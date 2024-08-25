@@ -36,6 +36,7 @@ class DataCabangKaryawansController extends Controller
     {
         // Validate the request
         $request->validate([
+            'id_karyawan' => 'nullable|string|max:255',
             'nama_lengkap' => 'required|string|max:255',
             'jabatan' => 'required|string|max:255',
             'alamat' => 'required|string|max:1000',
@@ -52,6 +53,7 @@ class DataCabangKaryawansController extends Controller
 
         // Insert data into the dynamic table
         DB::table($tableName)->insert([
+            'id_karyawan' => $request->input('id_karyawan'),
             'nama_lengkap' => $request->input('nama_lengkap'),
             'jabatan' => $request->input('jabatan'),
             'alamat' => $request->input('alamat'),
@@ -103,7 +105,7 @@ class DataCabangKaryawansController extends Controller
     {
         // Validate the input
         $request->validate([
-            'table_name' => 'required|string|max:255',
+            'id_karyawan' => 'required|string|max:255',
             'nama_lengkap' => 'required|string|max:255',
             'jabatan' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
@@ -115,6 +117,7 @@ class DataCabangKaryawansController extends Controller
 
         // Perform the update using the DB facade
         DB::table($tableName)->where('id', $id)->update([
+            'id_karyawan' => $request->input('id_karyawan'),
             'nama_lengkap' => $request->input('nama_lengkap'),
             'jabatan' => $request->input('jabatan'),
             'alamat' => $request->input('alamat'),

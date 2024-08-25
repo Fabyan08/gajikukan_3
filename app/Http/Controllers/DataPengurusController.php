@@ -40,6 +40,7 @@ class DataPengurusController extends Controller
     public function update(Request $request, $id)
     {
         data_pengurus_pengawas::where('id', $id)->update([
+            'id_karyawan' => $request->id_karyawan,
             'nama_lengkap' => $request->nama_lengkap,
             'jabatan' => $request->jabatan,
             'alamat' => $request->alamat,
@@ -50,6 +51,7 @@ class DataPengurusController extends Controller
     public function insert(Request $request)
     {
         $request->validate([
+            'id_karyawan' => 'required',
             'nama_lengkap' => 'required',
             'jabatan' => 'required',
             'alamat' => 'required',

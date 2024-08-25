@@ -126,6 +126,17 @@
                                         </div>
 
                                     </div>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <x-input-label for="ID Karyawan" :value="__('ID Karyawan')" />
+                                            <x-text-input id="id_karyawan" name="id_karyawan" type="text"
+                                                class="mt-1 block w-full" :value="old('id_karyawan', $user->id_karyawan)" required
+                                                autocomplete="id_karyawan" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('id_karyawan')" />
+
+                                        </div>
+
+                                    </div>
                                 </div>
                                 <div class="card-footer text-right">
                                     <button class="btn btn-primary">Edit Perubahan</button>

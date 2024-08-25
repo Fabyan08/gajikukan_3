@@ -76,6 +76,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">#</th>
+                                                <th>ID Karyawan</th>
                                                 <th>Nama Lengkap</th>
                                                 <th>Jabatan</th>
                                                 <th>Alamat</th>
@@ -88,6 +89,7 @@
                                             @foreach ($data as $dt)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $dt['id_karyawan'] }}</td>
                                                     <td>{{ $dt['nama_lengkap'] . ' (' . $dt['badge'] . ')' }}</td>
                                                     <td>{{ $dt['jabatan'] }}</td>
                                                     <td>{{ $dt['alamat'] }}</td>

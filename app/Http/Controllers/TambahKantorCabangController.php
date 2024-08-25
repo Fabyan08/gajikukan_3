@@ -103,6 +103,7 @@ class TambahKantorCabangController extends Controller
 
         Schema::create('data_karyawans_' . $tableName, function ($table) {
             $table->id();
+            $table->string('id_karyawan')->nullable();
             $table->string('nama_lengkap')->nullable();
             $table->string('jabatan')->nullable();
             $table->string('alamat')->nullable();
@@ -113,6 +114,7 @@ class TambahKantorCabangController extends Controller
 
         Schema::create('data_pengurus_pengawas_' . $tableName, function ($table) {
             $table->id();
+            $table->string('id_karyawan')->nullable();
             $table->string('nama_lengkap')->nullable();
             $table->string('jabatan')->nullable();
             $table->string('alamat')->nullable();

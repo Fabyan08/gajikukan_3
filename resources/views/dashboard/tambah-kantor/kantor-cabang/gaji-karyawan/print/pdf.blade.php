@@ -19,7 +19,7 @@
             border: 1px solid black;
             border-collapse: collapse;
             padding: 4px;
-             white-space: nowrap;
+            white-space: nowrap;
         }
     </style>
 </head>

@@ -16,10 +16,11 @@ class DataKaryawanImport implements ToCollection
         $indexKe = 1;
         foreach ($collection as $row) {
             if ($indexKe >= 3) {
-                $data['nama_lengkap'] = !empty($row[1]) ? strval($row[1]) : 'Nama Tidak Ditemukan';
-                $data['jabatan'] = !empty($row[2]) ? strval($row[2]) : 'Jabatan Tidak Ditemukan';
-                $data['alamat'] = !empty($row[3]) ? strval($row[3]) : 'Alamat Tidak Ditemukan';
-                $data['kontak'] = !empty($row[4]) ? strval($row[4]) : 'Kontak Tidak Ditemukan';
+                $data['id_karyawan'] = !empty($row[1]) ? $row[1] : 'ID Tidak Ditemukan';
+                $data['nama_lengkap'] = !empty($row[2]) ? $row[2] : 'Nama Tidak Ditemukan';
+                $data['jabatan'] = !empty($row[3]) ? $row[3] : 'Jabatan Tidak Ditemukan';
+                $data['alamat'] = !empty($row[4]) ? $row[4] : 'Alamat Tidak Ditemukan';
+                $data['kontak'] = !empty($row[5]) ? (string) $row[5] : '0';
                 $data['status'] = 'Aktif';
 
                 data_karyawans::create($data);

@@ -109,6 +109,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">#</th>
+                                                <th>ID Karyawan</th>
                                                 <th>Nama Lengkap</th>
                                                 <th>Jabatan</th>
                                                 <th>Alamat</th>
@@ -123,6 +124,7 @@
                                             @foreach ($karyawan as $data)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $data->id_karyawan }}</td>
                                                     <td>{{ $data->nama_lengkap }}</td>
                                                     <td>{{ $data->jabatan }}</td>
                                                     <td>{{ $data->alamat }}</td>
@@ -195,6 +197,11 @@
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('put')
+                            <div class="mt-4">
+                                <label for="id_karyawan">ID Karyawan</label>
+                                <input type="text" value="{{ $data->id_karyawan }}" class="form-control"
+                                    name="id_karyawan" id="id_karyawan">
+                            </div>
                             <div class="mt-4">
                                 <label for="nama_lengkap">Nama Lengkap</label>
                                 <input type="text" value="{{ $data->nama_lengkap }}" class="form-control"
@@ -272,6 +279,10 @@
                     <form action="{{ route('data-pengurus_pengawas.insert') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
+                        <div class="mt-4">
+                            <label for="id_karyawan">ID Karyawan</label>
+                            <input type="text" class="form-control" name="id_karyawan" id="id_karyawan">
+                        </div>
                         <div class="mt-4">
                             <label for="nama_lengkap">Nama Lengkap</label>
                             <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap">

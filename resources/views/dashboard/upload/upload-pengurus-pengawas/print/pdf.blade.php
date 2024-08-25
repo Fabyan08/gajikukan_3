@@ -19,7 +19,7 @@
             border: 1px solid black;
             border-collapse: collapse;
             padding: 4px;
-             white-space: nowrap;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -150,7 +150,8 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>BPJS TK Kesehatan</td>
-                                                        <td>Rp {{ number_format(floatval(str_replace(',', '.', $gaji->potongan_bpjs_tk_kesehatan)), 2, ',', '.') }}
+                                                        <td>Rp
+                                                            {{ number_format(floatval(str_replace(',', '.', $gaji->potongan_bpjs_tk_kesehatan)), 2, ',', '.') }}
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -191,6 +192,12 @@
                         <img src="{{ $imageSrc }}" alt="Logo"
                             style="width: 40px;position: absolute;left:4;bottom:4;">
                         <p style="position: absolute;left:50;bottom:1;"><b>Kanindo Syariah</b></p>
+                        <div style="position: absolute; right:20;bottom:10;font-weight: bold">
+                            <p>Malang, {{ date('d F Y') }}<br> Laporan Pendapatan/ Slip
+                                Gaji <br>Kanindo Jatim</p>
+                            <br><br><br><br><br>
+                            <p>({{ Auth::user()->nama }}) <br>ID: {{ Auth::user()->id_karyawan }} </p>
+                        </div>
                     </div>
                 </div>
             </div>

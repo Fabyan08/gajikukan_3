@@ -41,9 +41,11 @@ class ProfileController extends Controller
     public function update_profile(Request $request, $id)
     {
         $user = User::where('id', $id)->update([
+            'id_karyawan' => $request->id_karyawan,
             'nama' => $request->name,
             'email' => $request->email,
             'no_telp' => $request->telepon,
+
         ]);
         return redirect()->back()->with('status', 'Berhasil Edit.');
     }
