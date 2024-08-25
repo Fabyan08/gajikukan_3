@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CariController;
+use App\Http\Controllers\ChartOfAccountController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataKaryawansController;
 use App\Http\Controllers\DataPengurusController;
@@ -182,6 +183,9 @@ Route::middleware('auth', 'check.status:Aktif')->group(function () {
     // Laporan
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::post('/laporan/print', [LaporanController::class, 'print'])->name('laporan.print');
+
+    // Chart of Account
+    Route::get('/chart-account', [ChartOfAccountController::class, 'index'])->name('coa.index');
 });
 Route::middleware('auth', 'check.status:Tidak Aktif')->group(function () {
     // Dashboard

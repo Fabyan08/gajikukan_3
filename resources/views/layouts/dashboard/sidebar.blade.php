@@ -8,7 +8,7 @@
             <div class="sidebar-brand sidebar-brand-sm">
                 <a href="/"><img src="{{ asset('img/logo.jpg') }}" alt="logo" style="width: 30px"></a>
             </div>
-                        <p class="px-4 pt-2 text-center">Koperasi Agro Niaga Indonesia Syariah Malang Jawa Timur</p>
+            <p class="px-4 pt-2 text-center">Koperasi Agro Niaga Indonesia Syariah Malang Jawa Timur</p>
 
             <ul class="sidebar-menu">
                 <li class="menu-header">Dashboard</li>
@@ -45,9 +45,15 @@
                     </ul>
                 </li>
                 <li class="menu-header">Kantor Cabang</li>
-                <li class="{{ Request::is('tambah-kantor') || Request::is('detail-kantor-cabang*') || Request::is('kantor-cabang*')  ? 'active' : '' }}"><a class="nav-link"
-                        href="/tambah-kantor"><i class="fas fa-building"></i>
+                <li
+                    class="{{ Request::is('tambah-kantor') || Request::is('detail-kantor-cabang*') || Request::is('kantor-cabang*') ? 'active' : '' }}">
+                    <a class="nav-link" href="/tambah-kantor"><i class="fas fa-building"></i>
                         <span>Kantor Cabang</span></a>
+                </li>
+                <li class="menu-header">Master Data</li>
+                <li class="{{ Request::is('chart-account') ? 'active' : '' }}">
+                    <a class="nav-link" href="/chart-account"><i class="fas fa-building"></i>
+                        <span>Chart of Account</span></a>
                 </li>
                 <li class="menu-header">Laporaan</li>
                 <li class="{{ Request::is('laporan') ? 'active' : '' }}"><a class="nav-link" href="/laporan"><i
