@@ -189,6 +189,9 @@ Route::middleware('auth', 'check.status:Aktif')->group(function () {
     Route::post('/chart-account/post', [ChartOfAccountController::class, 'create'])->name('coa.create');
     Route::get('/chart-account/{id}', [ChartOfAccountController::class, 'detail'])->name('coa.detail');
     Route::delete('/chart-account/delete/{id}', [ChartOfAccountController::class, 'delete'])->name('coa.delete');
+    Route::post('/chart-account/update/{id}', [ChartOfAccountController::class, 'update'])->name('coa.update');
+    Route::delete('/chart-account/delete-all', [ChartOfAccountController::class, 'delete_all'])->name('coa.delete_all');
+    Route::post('/chart-account/import', [ChartOfAccountController::class, 'import'])->name('coa.import');
 });
 Route::middleware('auth', 'check.status:Tidak Aktif')->group(function () {
     // Dashboard

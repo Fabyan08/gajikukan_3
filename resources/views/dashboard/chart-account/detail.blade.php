@@ -14,6 +14,36 @@
             </div>
 
             <div class="section-body">
+                @session('success')
+                    <div class="alert alert-success alert-dismissible show fade">
+                        <div class="alert-body">
+                            <button class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            {{ session('success') }}
+                        </div>
+                    </div>
+                @endsession
+                @session('delete')
+                    <div class="alert alert-danger alert-dismissible show fade">
+                        <div class="alert-body">
+                            <button class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            {{ session('delete') }}
+                        </div>
+                    </div>
+                @endsession
+                @session('error')
+                    <div class="alert alert-danger alert-dismissible show fade">
+                        <div class="alert-body">
+                            <button class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            {{ session('error') }}
+                        </div>
+                    </div>
+                @endsession
                 <div>
                     <h2 class="section-title">Detail Data {{ $coa->nama }}</h2>
                     <button type="button" data-toggle="modal" data-target="#edit-modal"
@@ -143,12 +173,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('coa.create') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('coa.update', $coa->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col">
                                 <label for="id_karyawan">ID Karyawan</label>
-                                <input type="number" value="{{ $coa->id }}" class="form-control"
+                                <input type="number" value="{{ $coa->id_karyawan }}" class="form-control"
                                     name="id_karyawan" id="id_karyawan">
                             </div>
                             <div class="col">
@@ -163,67 +193,91 @@
                                 <select name="jenis_kelamin" id="jenis_kelamin" class="form-control">
                                     <option @if ($coa->jenis_kelamin == 'Laki-laki') selected @endif value="Laki-laki">
                                         Laki-laki</option>
-                                    <option @if ($coa->jenis_kelamin == 'Perempuan') selected @endif value="Perempuan">Perempuan</option>
+                                    <option @if ($coa->jenis_kelamin == 'Perempuan') selected @endif value="Perempuan">
+                                        Perempuan</option>
                                 </select>
                             </div>
                             <div class="col">
                                 <label for="jabatan">Jabatan</label>
                                 <select name="jabatan" id="jabatan" class="form-control">
-                                    <option value="Ketua">Ketua</option>
-                                    <option value="Sekretaris">Sekretaris</option>
-                                    <option value="Bendahara">Bendahara</option>
-                                    <option value="Ketua Pengawas">Ketua Pengawas </option>
-                                    <option value="Anggota Pengawas ">Anggota Pengawas </option>
-                                    <option value="Manajer Operasional ">Manajer Operasional </option>
-                                    <option value="Manajer Bisnis ">Manajer Bisnis </option>
-                                    <option value="Pembukuan Pusat ">Pembukuan Pusat </option>
-                                    <option value="Kasir Pusat ">Kasir Pusat </option>
-                                    <option value="Kepala Cabang ">Kepala Cabang </option>
-                                    <option value="Account Officer ">Account Officer </option>
-                                    <option value="Customer Service ">Customer Service </option>
-                                    <option value="Satpam ">Satpam </option>
-                                    <option value="Internal Control ">Internal Control </option>
-                                    <option value="Remidial">Remidial</option>
-                                    <option value="Ka Capem ">Ka Capem </option>
-                                    <option value="Umum">Umum</option>
-                                    <option value="OB & Jaga Malam">OB & Jaga Malam</option>
+
+                                    <option @if ($coa->jabatan == 'Ketua') selected @endif value="Ketua">Ketua
+                                    </option>
+                                    <option @if ($coa->jabatan == 'Sekretaris') selected @endif value="Sekretaris">
+                                        Sekretaris</option>
+                                    <option @if ($coa->jabatan == 'Bendahara') selected @endif value="Bendahara">
+                                        Bendahara</option>
+                                    <option @if ($coa->jabatan == 'Ketua Pengawas') selected @endif value="Ketua Pengawas">
+                                        Ketua Pengawas </option>
+                                    <option @if ($coa->jabatan == 'Anggota Pengawas ') selected @endif
+                                        value="Anggota Pengawas ">Anggota Pengawas </option>
+                                    <option @if ($coa->jabatan == 'Manajer Operasional ') selected @endif
+                                        value="Manajer Operasional ">Manajer Operasional </option>
+                                    <option @if ($coa->jabatan == 'Manajer Bisnis') selected @endif value="Manajer Bisnis">
+                                        Manajer Bisnis </option>
+                                    <option @if ($coa->jabatan == 'Pembukuan Pusat ') selected @endif value="Pembukuan Pusat ">
+                                        Pembukuan Pusat </option>
+                                    <option @if ($coa->jabatan == 'Kasir Pusat ') selected @endif value="Kasir Pusat ">
+                                        Kasir Pusat </option>
+                                    <option @if ($coa->jabatan == 'Kepala Cabang ') selected @endif value="Kepala Cabang ">
+                                        Kepala Cabang </option>
+                                    <option @if ($coa->jabatan == 'Account Officer ') selected @endif
+                                        value="Account Officer ">Account Officer </option>
+                                    <option @if ($coa->jabatan == 'Customer Service ') selected @endif
+                                        value="Customer Service ">Customer Service </option>
+                                    <option @if ($coa->jabatan == 'Satpam ') selected @endif value="Satpam ">Satpam
+                                    </option>
+                                    <option @if ($coa->jabatan == 'Internal Control ') selected @endif
+                                        value="Internal Control ">Internal Control </option>
+                                    <option @if ($coa->jabatan == 'Remidial') selected @endif value="Remidial">
+                                        Remidial</option>
+                                    <option @if ($coa->jabatan == 'Ka Capem ') selected @endif value="Ka Capem ">Ka
+                                        Capem </option>
+                                    <option @if ($coa->jabatan == 'Umum') selected @endif value="Umum">Umum
+                                    </option>
+                                    <option @if ($coa->jabatan == 'OB & Jaga Malam') selected @endif
+                                        value="OB & Jaga Malam">OB & Jaga Malam</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row mt-4">
                             <div class="col">
                                 <label for="divisi">Divisi</label>
-                                <input type="text" class="form-control" name="divisi" id="divisi">
+                                <input value="{{ $coa->divisi }}" type="text" class="form-control"
+                                    name="divisi" id="divisi">
                             </div>
                             <div class="col">
                                 <label for="masa_kerja">Masa Kerja</label>
-                                <input type="text" class="form-control" name="masa_kerja" id="masa_kerja">
+                                <input type="text" value="{{ $coa->masa_kerja }}" class="form-control"
+                                    name="masa_kerja" id="masa_kerja">
                             </div>
                         </div>
                         <div class="row mt-4">
                             <div class="col">
                                 <label for="status_karyawan">Status Karyawan</label>
-                                <input type="text" class="form-control" name="status_karyawan"
-                                    id="status_karyawan">
+                                <input type="text" value="{{ $coa->status_karyawan }}" class="form-control"
+                                    name="status_karyawan" id="status_karyawan">
                             </div>
                             <div class="col">
                                 <label for="alamat">Alamat</label>
-                                <input type="text" class="form-control" name="alamat" id="alamat">
+                                <input type="text" value="{{ $coa->alamat }}" class="form-control"
+                                    name="alamat" id="alamat">
                             </div>
                         </div>
                         <div class="row mt-4">
                             <div class="col">
                                 <label for="npwp">NPWP</label>
-                                <input type="text" class="form-control" name="npwp" id="npwp">
+                                <input type="text" value="{{ $coa->npwp }}" class="form-control"
+                                    name="npwp" id="npwp">
                             </div>
                             <div class="col">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" id="email">
+                                <input type="email" value="{{ $coa->email }}" class="form-control"
+                                    name="email" id="email">
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-warning "><i
-                                    class="fas fa-plus"></i>Tambah</button>
+                            <button type="submit" class="btn btn-warning "><i class="fas fa-edit"></i> Edit</button>
                         </div>
                     </form>
 

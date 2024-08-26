@@ -94,14 +94,14 @@
                                     Tambah Manual</button>
 
                                 @if ($coa->isNotEmpty())
-                                    <form action="{{ route('data-karyawan.delete') }}" method="POST">
+                                    <form action="{{ route('coa.delete_all') }}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button
-                                            onclick="return confirm('Apakah anda yakin ingin menghapus semua data upload karyawan ?')"
+                                            onclick="return confirm('Apakah anda yakin ingin menghapus semua data?')"
                                             type="submit" class="btn btn-icon h-fit icon-left btn-danger"
                                             style="height: fit-content">
-                                            <i class="far fa-trash-alt"></i> Hapus Semua Data Karyawan
+                                            <i class="far fa-trash-alt"></i> Hapus Semua Data
                                         </button>
                                     </form>
                                 @else
@@ -132,8 +132,20 @@
                                                     <td>{{ $data->nama }}</td>
                                                     <td>{{ $data->jenis_kelamin }}</td>
                                                     <td>{{ $data->jabatan }}</td>
-                                                    <td><a href="" class="btn btn-icon btn-danger">
-                                                            <i class="fas fa-trash"></i></a></td>
+                                                    <td>
+                                                        <form action="{{ route('coa.delete', $data->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button
+                                                                onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')"
+                                                                type="submit"
+                                                                class="btn btn-icon h-fit icon-left btn-danger"
+                                                                style="height: fit-content">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
                                                     <td>
                                                         <a href="{{ route('coa.detail', $data->id) }}"
                                                             class="btn btn-icon btn-info"><i class="fas fa-eye"></i></a>
@@ -163,10 +175,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('data-karyawan.import') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('coa.import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mt-4">
-                            <label for="file">Upload Data Karyawan</label>
+                            <label for="file">Upload Data</label>
                             <input type="file" class="form-control" name="file" id="file">
                         </div>
                         <div class="mt-4">
