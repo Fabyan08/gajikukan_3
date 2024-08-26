@@ -10,6 +10,7 @@
             </div>
 
             <div class="section-body">
+
                 @session('success')
                     <div class="alert alert-success alert-dismissible show fade">
                         <div class="alert-body">
@@ -27,6 +28,16 @@
                                 <span>&times;</span>
                             </button>
                             {{ session('delete') }}
+                        </div>
+                    </div>
+                @endsession
+                @session('error')
+                    <div class="alert alert-danger alert-dismissible show fade">
+                        <div class="alert-body">
+                            <button class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            {{ session('error') }}
                         </div>
                     </div>
                 @endsession
@@ -109,6 +120,7 @@
                                                 <th>Nama Lengkap</th>
                                                 <th>Jenis Kelamin</th>
                                                 <th>Jabatan</th>
+                                                <th>Hapus</th>
                                                 <th>Detail</th>
                                             </tr>
                                         </thead>
@@ -116,14 +128,15 @@
                                             @foreach ($coa as $data)
                                                 <tr>
                                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                                    <td>{{ $data->id }}</td>
-                                                    <td>{{ $data->name }}</td>
-                                                    <td>{{ $data->gender }}</td>
-                                                    <td>{{ $data->position }}</td>
+                                                    <td>{{ $data->id_karyawan }}</td>
+                                                    <td>{{ $data->nama }}</td>
+                                                    <td>{{ $data->jenis_kelamin }}</td>
+                                                    <td>{{ $data->jabatan }}</td>
+                                                    <td><a href="" class="btn btn-icon btn-danger">
+                                                            <i class="fas fa-trash"></i></a></td>
                                                     <td>
-                                                        <a href=""
-                                                            class="btn btn-icon btn-info"><i
-                                                                class="fas fa-eye"></i></a>
+                                                        <a href="{{ route('coa.detail', $data->id) }}"
+                                                            class="btn btn-icon btn-info"><i class="fas fa-eye"></i></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -176,51 +189,79 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('data-karyawan.insert') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('coa.create') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="mt-4">
-                            <label for="id_karyawan">ID Karyawan</label>
-                            <input type="text" class="form-control" name="id_karyawan" id="id_karyawan">
-                        </div>
-                        <div class="mt-4">
-                            <label for="nama_lengkap">Nama Lengkap</label>
-                            <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap">
-                        </div>
-                        <div class="mt-4">
-                            <label for="jabatan">Jabatan</label>
-                            <select name="jabatan" id="jabatan" class="form-control">
-                                <option value="Ketua">Ketua</option>
-                                <option value="Sekretaris">Sekretaris</option>
-                                <option value="Bendahara">Bendahara</option>
-                                <option value="Ketua Pengawas">Ketua Pengawas </option>
-                                <option value="Anggota Pengawas ">Anggota Pengawas </option>
-                                <option value="Manajer Operasional ">Manajer Operasional </option>
-                                <option value="Manajer Bisnis ">Manajer Bisnis </option>
-                                <option value="Pembukuan Pusat ">Pembukuan Pusat </option>
-                                <option value="Kasir Pusat ">Kasir Pusat </option>
-                                <option value="Kepala Cabang ">Kepala Cabang </option>
-                                <option value="Account Officer ">Account Officer </option>
-                                <option value="Customer Service ">Customer Service </option>
-                                <option value="Satpam ">Satpam </option>
-                                <option value="Internal Control ">Internal Control </option>
-                                <option value="Remidial">Remidial</option>
-                                <option value="Ka Capem ">Ka Capem </option>
-                                <option value="Umum">Umum</option>
-                                <option value="OB & Jaga Malam">OB & Jaga Malam</option>
-                            </select>
-                        </div>
-                        <div class="mt-4">
-                            <label for="alamat">Alamat</label>
-                            <textarea class="form-control" name="alamat" id="alamat"> </textarea>
-                        </div>
-                        <div class="mt-4">
-                            <label for="kontak">Kontak</label>
-                            <div class="input-group">
-                                <span class="input-group-text" id="basic-addon1">62</span>
-                                <input type="number" class="form-control" name="kontak" id="kontak"
-                                    aria-label="Username" aria-describedby="basic-addon1">
+                        <div class="row">
+                            <div class="col">
+                                <label for="id_karyawan">ID Karyawan</label>
+                                <input type="number" class="form-control" name="id_karyawan" id="id_karyawan">
                             </div>
-                            <div class="form-text" id="basic-addon4">Jangan Isi Dengan 0. (Contoh: 812345678909).
+                            <div class="col">
+                                <label for="nama_karyawan">Nama Karyawan</label>
+                                <input type="text" class="form-control" name="nama_karyawan" id="nama_karyawan">
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label for="id_karyawan">Jenis Kelamin</label>
+                                <select name="jenis_kelamin" id="jenis_kelamin" class="form-control">
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="jabatan">Jabatan</label>
+                                <select name="jabatan" id="jabatan" class="form-control">
+                                    <option value="Ketua">Ketua</option>
+                                    <option value="Sekretaris">Sekretaris</option>
+                                    <option value="Bendahara">Bendahara</option>
+                                    <option value="Ketua Pengawas">Ketua Pengawas </option>
+                                    <option value="Anggota Pengawas ">Anggota Pengawas </option>
+                                    <option value="Manajer Operasional ">Manajer Operasional </option>
+                                    <option value="Manajer Bisnis ">Manajer Bisnis </option>
+                                    <option value="Pembukuan Pusat ">Pembukuan Pusat </option>
+                                    <option value="Kasir Pusat ">Kasir Pusat </option>
+                                    <option value="Kepala Cabang ">Kepala Cabang </option>
+                                    <option value="Account Officer ">Account Officer </option>
+                                    <option value="Customer Service ">Customer Service </option>
+                                    <option value="Satpam ">Satpam </option>
+                                    <option value="Internal Control ">Internal Control </option>
+                                    <option value="Remidial">Remidial</option>
+                                    <option value="Ka Capem ">Ka Capem </option>
+                                    <option value="Umum">Umum</option>
+                                    <option value="OB & Jaga Malam">OB & Jaga Malam</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label for="divisi">Divisi</label>
+                                <input type="text" class="form-control" name="divisi" id="divisi">
+                            </div>
+                            <div class="col">
+                                <label for="masa_kerja">Masa Kerja</label>
+                                <input type="text" class="form-control" name="masa_kerja" id="masa_kerja">
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label for="status_karyawan">Status Karyawan</label>
+                                <input type="text" class="form-control" name="status_karyawan"
+                                    id="status_karyawan">
+                            </div>
+                            <div class="col">
+                                <label for="alamat">Alamat</label>
+                                <input type="text" class="form-control" name="alamat" id="alamat">
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label for="npwp">NPWP</label>
+                                <input type="text" class="form-control" name="npwp" id="npwp">
+                            </div>
+                            <div class="col">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email">
                             </div>
                         </div>
                         <div class="mt-4">

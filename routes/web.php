@@ -186,6 +186,9 @@ Route::middleware('auth', 'check.status:Aktif')->group(function () {
 
     // Chart of Account
     Route::get('/chart-account', [ChartOfAccountController::class, 'index'])->name('coa.index');
+    Route::post('/chart-account/post', [ChartOfAccountController::class, 'create'])->name('coa.create');
+    Route::get('/chart-account/{id}', [ChartOfAccountController::class, 'detail'])->name('coa.detail');
+    Route::delete('/chart-account/delete/{id}', [ChartOfAccountController::class, 'delete'])->name('coa.delete');
 });
 Route::middleware('auth', 'check.status:Tidak Aktif')->group(function () {
     // Dashboard
