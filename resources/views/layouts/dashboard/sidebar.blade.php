@@ -50,10 +50,15 @@
                     <a class="nav-link" href="/tambah-kantor"><i class="fas fa-building"></i>
                         <span>Kantor Cabang</span></a>
                 </li>
-                <li class="menu-header">Master Data</li>
+                <li class="menu-header">PPH</li>
                 <li class="{{ Request::is('chart-account') ? 'active' : '' }}">
                     <a class="nav-link" href="/chart-account"><i class="fas fa-building"></i>
                         <span>Chart of Account</span></a>
+                </li>
+                <li class="menu-header">Master Data</li>
+                <li class="{{ Request::is('pph-21') ? 'active' : '' }}">
+                    <a class="nav-link" href="/chart-account"><i class="fas fa-building"></i>
+                        <span>PPh 21</span></a>
                 </li>
                 <li class="menu-header">Laporaan</li>
                 <li class="{{ Request::is('laporan') ? 'active' : '' }}"><a class="nav-link" href="/laporan"><i
