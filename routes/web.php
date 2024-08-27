@@ -18,6 +18,7 @@ use App\Http\Controllers\KantorCabang\DataGajiKaryawansController;
 use App\Http\Controllers\KantorCabangController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PenghuniController;
+use App\Http\Controllers\PphController;
 use App\Http\Controllers\TambahKantorCabangController;
 use App\Http\Controllers\TidakAktifController;
 use App\Http\Controllers\UploadKaryawanController;
@@ -192,6 +193,17 @@ Route::middleware('auth', 'check.status:Aktif')->group(function () {
     Route::post('/chart-account/update/{id}', [ChartOfAccountController::class, 'update'])->name('coa.update');
     Route::delete('/chart-account/delete-all', [ChartOfAccountController::class, 'delete_all'])->name('coa.delete_all');
     Route::post('/chart-account/import', [ChartOfAccountController::class, 'import'])->name('coa.import');
+
+    // PPH
+    Route::get('/pph-21', [PphController::class, 'index'])->name('pph.index');
+    Route::post('/pph-21/tambah-kantor', [PphController::class, 'tambah_kantor'])->name('pph.tambah_kantor');
+    Route::delete('/pph-21/delete-kantor', [PphController::class, 'hapus_kantor'])->name('pph.hapus_kantor');
+
+    Route::get('/pph-21/pusat', [PphController::class, 'detail_pusat'])->name('pph.detail_pusat');
+    Route::post('/pph-21/pusat/tambah-waktu', [PphController::class, 'store_waktu_pusat'])->name('pph.store_waktu_pusat');
+    Route::delete('/pph-21/pusat/delete-waktu/{id}', [PphController::class, 'delete_waktu_pusat'])->name('pph.delete_waktu_pusat');
+    Route::get('/pph-21/pusat/{id_waktu}', [PphController::class, 'index_pusat'])->name('pph.index_pusat');
+    Route::post('/pph-21/pusat/tambah-data', [PphController::class, 'store_pusat'])->name('pph.store_pusat');
 });
 Route::middleware('auth', 'check.status:Tidak Aktif')->group(function () {
     // Dashboard
