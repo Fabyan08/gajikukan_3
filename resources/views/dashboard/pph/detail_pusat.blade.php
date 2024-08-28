@@ -52,8 +52,7 @@
                                 </div>
 
                                 @if ($pph->isNotEmpty())
-                                    <form
-                                        action="{{ route('kantor-cabang.gaji-karyawan.delete', ['id_waktu' => $waktu->id]) }}"
+                                    <form action="{{ route('pph.delete_all_pusat', ['id_waktu' => $waktu->id]) }}"
                                         method="POST">
                                         @csrf
                                         @method('delete')
@@ -81,21 +80,27 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">#</th>
-                                                <th>Nama</th>
-                                                <th>Jabatan</th>
-                                                <th>Gaji Pokok</th>
-                                                <th>Tunjangan</th>
-                                                <th>Reward</th>
-                                                <th>BPJS</th>
-                                                <th>Potongan Gaji</th>
+                                                <th>Nama Pegawai</th>
+                                                <th>Status</th>
+                                                <th>Penghasilan Bruto / Bulan</th>
                                                 <th>Detail</th>
                                                 <th>PRINT SLIP GAJI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td></td>
-                                            </tr>
+                                            @foreach ($pph as $data)
+                                                <tr>
+                                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                                    <td>{{ $data->nama_pegawai }}</td>
+                                                    <td>{{ $data->status }}</td>
+                                                    <td>Rp{{ number_format($data->penghasilan_bruto_bulan, 2, ',', '.') }}
+                                                    </td>
+                                                    <td><a href="{{ route('pph.waktu_detail_pusat', ['id_waktu' => $data->id_waktu, 'id' => $data->id]) }}"
+                                                            class="btn btn-warning">Detail</a>
+                                                    </td>
+                                                    <td><a href="" class="btn btn-info">Print</a>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
 

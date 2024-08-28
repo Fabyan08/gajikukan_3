@@ -30,7 +30,7 @@ class PphImport implements ToCollection
             $rowData = [];
             $emptyRow = true;
             foreach ($row as $key => $value) {
-                if ($key > 0 && $key < 24) {
+                if ($key > 0 && $key < 15) {
                     $rowData[] = $value;
                     if (!empty($value)) {
                         $emptyRow = false;
@@ -50,28 +50,19 @@ class PphImport implements ToCollection
         foreach ($mainCollection as $item) {
             $user = [
                 'id_waktu' => $this->id_waktu,
-                'nama' => $item[0] ?? 'Tidak Ditemukan',
-                'jabatan' => $item[1] ?? 'Tidak Ditemukan',
-                'gaji_pokok' => $item[2] ?? '0',
-                'tunjangan_makan' => $item[3] ?? '0',
-                'tunjangan_transport' => $item[4] ?? '0',
-                'tunjangan_senja' => $item[5] ?? '0',
-                'tunjangan_hadir' => $item[6] ?? '0',
-                'tunjangan_jabatan' => $item[7] ?? '0',
-                'tunjangan_komunikasi' => $item[8] ?? '0',
-                'tunjangan_natura' => $item[9] ?? '0',
-                'reward_lending' => $item[10] ?? '0',
-                'reward_funding' => $item[11] ?? '0',
-                'bpjs_tk' => $item[12] ?? '0',
-                'bpjs_kesehatan' => $item[13] ?? '0',
-                'gaji_kotor' => $item[14] ?? '0',
-                'potongan_bpjs_tk_kesehatan' => $item[15] ?? '0',
-                'potongan_angsuran' => $item[16] ?? '0',
-                'potongan_ijin' => $item[17] ?? '0',
-                'potongan_zis' => $item[19] ?? '0',
-                'potongan_pensiun' => $item[20] ?? '0',
-                'total_potongan' => $item[21] ?? '0',
-                'gaji_bersih' => $item[22] ?? '0',
+                'nama_pegawai' => $item[0] ?? 'Tidak Ditemukan',
+                'status' => $item[1] ?? 'Tidak Ditemukan',
+                'penghasilan_bruto_bulan' => $item[2] ?? '0',
+                'penghasilan_disetahunkan' => $item[3] ?? '0',
+                'bonus' => $item[4] ?? '0',
+                'thr' => $item[5] ?? '0',
+                'penghasilan_bruto' => $item[6] ?? '0',
+                'pengurangan_biaya_jabatan' => $item[7] ?? '0',
+                'jumlah_penghasilan_neto_setahun' => $item[8] ?? '0',
+                'ptkp' => $item[9] ?? '0',
+                'ptkp_disetahunkan' => $item[10] ?? '0',
+                'pph_21' => $item[11] ?? '0',
+                'iuran_per_bulan' => $item[12] ?? '0',
             ];
 
             // dd($user);

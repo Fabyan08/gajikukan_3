@@ -84,36 +84,12 @@
                         <div class="card">
                             <div class="d-flex justify-between">
                                 <div class="card-header">
-                                    @if ($pph->isNotEmpty())
-                                        <h4>Data (Jika Terjadi Kesalahan, Hapus Data Lalu Upload Ulang Ya!)</h4>
-                                    @else
-                                        <h4>Data</h4>
-                                    @endif
+                                    <h4>Data PPH 21</h4>
                                 </div>
-
-
-                                @if ($pph->isNotEmpty())
-                                    <form
-                                        action="{{ route('kantor-cabang.gaji-karyawan.delete', ['id_waktu' => $waktu->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <input type="text" value="{{ $tableName }}" name="table_name" hidden>
-                                        <button
-                                            onclick="return confirm('Apakah anda yakin ingin menghapus semua data upload {{ $waktu->bulan }}-{{ $waktu->tahun }} ?')"
-                                            type="submit" class="btn btn-icon h-fit icon-left btn-danger"
-                                            style="height: fit-content">
-                                            <i class="far fa-trash-alt"></i> Hapus Semua Data Upload
-                                            {{ $waktu->bulan }}-{{ $waktu->tahun }}
-                                        </button>
-                                    </form>
-                                @else
-                                    <button data-toggle="modal" data-target="#tambah-modal"
-                                        class="btn btn-icon h-fit icon-left btn-primary" style="height: fit-content">
-                                        <i class="far fa-edit"></i> Tambah Data
-                                    </button>
-                                @endif
-
+                                <button data-toggle="modal" data-target="#tambah-modal"
+                                    class="btn btn-icon h-fit icon-left btn-primary" style="height: fit-content">
+                                    <i class="far fa-edit"></i> Tambah Data
+                                </button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">

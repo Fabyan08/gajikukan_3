@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Excel;
+
 class PphController extends Controller
 {
     public function index(Request $request)
@@ -44,13 +45,14 @@ class PphController extends Controller
             $table->id();
             $table->string('id_waktu');
             $table->string('nama_pegawai');
+            $table->string('status');
             $table->string('penghasilan_bruto_bulan');
             $table->string('penghasilan_disetahunkan');
             $table->string('bonus');
             $table->string('thr');
             $table->string('penghasilan_bruto');
             $table->string('pengurangan_biaya_jabatan');
-            $table->string('jumlah_penghasilan_neto_sebulan');
+            $table->string('jumlah_penghasilan_neto_setahun');
             $table->string('ptkp');
             $table->string('ptkp_disetahunkan');
             $table->string('pph_21');
@@ -108,20 +110,22 @@ class PphController extends Controller
     {
         $waktu = WaktuPph::find($id);
 
+
         if (!$waktu) {
             return redirect()->back()->with('error', 'Data Waktu Tidak Ditemukan');
         }
+
 
         // Check if the 'id_waktu' exists in the 'pph' table
         $existsInPph = DB::table('pph')->where('id_waktu', $id)->exists();
 
         if ($existsInPph) {
             // If it exists, don't delete and return with a warning
-            return redirect()->back()->with('warning', 'Data Waktu Tidak Dapat Dihapus Karena Masih Digunakan di Tabel PPH');
+            $waktu->delete();
         }
-
         // If 'id_waktu' does not exist in the 'pph' table, proceed with deletion
-        $waktu->delete();
+
+        $delete_waktu_pph = WaktuPph::where('id', $id)->delete();
 
         return redirect()->back()->with('success', 'Data Waktu Berhasil Dihapus');
     }
@@ -137,13 +141,78 @@ class PphController extends Controller
     {
 
         $request->validate([
-            'id_waktu' => 'required',
             'file' => 'required|file|mimes:csv,xls,xlsx,txt', // Added max size validation
         ]);
+
 
         $file = $request->file('file');
         Excel::import(new PphImport($id_waktu), $request->file('file'));
 
         return redirect()->back()->with('success', 'Data PPH Berhasil Ditambahkan');
+    }
+
+    public function waktu_detail_pusat($id, $id_waktu)
+    {
+        $pph = DB::table('pph')
+            ->join('waktu_pph', 'waktu_pph.id', '=', 'pph.id_waktu')
+            ->where('waktu_pph.id', $id)
+            ->where('pph.id', $id_waktu)
+            ->select('pph.*', 'waktu_pph.*', 'waktu_pph.id as id_waktu', 'pph.id as id_pph')
+            ->first();
+
+
+        return view('dashboard.pph.waktu_detail_pusat', compact('pph'));
+    }
+
+    public function update_waktu_detail_pusat(Request $request, $id, $id_waktu)
+    {
+
+        $request->validate([
+            'nama_pegawai' => 'required',
+            'status' => 'required',
+            'penghasilan_bruto_bulan' => 'required',
+            'penghasilan_disetahunkan' => 'required',
+            'bonus' => 'required',
+            'thr' => 'required',
+            'penghasilan_bruto' => 'required',
+            'pengurangan_biaya_jabatan' => 'required',
+            'jumlah_penghasilan_neto_setahun' => 'required',
+            'ptkp' => 'required',
+            'ptkp_disetahunkan' => 'required',
+            'pph_21' => 'required',
+            'iuran_per_bulan' => 'required',
+        ]);
+
+        $pph = Pph::find($id_waktu);
+
+        if (!$pph) {
+            return redirect()->back()->with('error', 'Data PPH Tidak Ditemukan');
+        } else {
+
+            $pph->update([
+                'id_waktu' => $id_waktu,
+                'nama_pegawai' => $request->nama_pegawai,
+                'status' => $request->status,
+                'penghasilan_bruto_bulan' => $request->penghasilan_bruto_bulan,
+                'penghasilan_disetahunkan' => $request->penghasilan_disetahunkan,
+                'bonus' => $request->bonus,
+                'thr' => $request->thr,
+                'pengurangan_biaya_jabatan' => $request->pengurangan_biaya_jabatan,
+                'ptkp' => $request->ptkp,
+                'ptkp_disetahunkan' => $request->ptkp_disetahunkan,
+                'pph_21' => $request->pph_21,
+                'iuran_per_bulan' => $request->iuran_per_bulan,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Data PPH Berhasil Di-update!');
+    }
+
+    public function delete_all_pusat(Request $request, $id_waktu)
+    {
+
+        $pph = Pph::where('id_waktu', $id_waktu)->delete();
+
+        return redirect()->back()->with('success', 'Data PPH Berhasil Dihapus');
     }
 }

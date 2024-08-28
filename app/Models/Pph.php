@@ -13,13 +13,14 @@ class Pph extends Model
 
     protected $fillable = [
         'nama_pegawai',
+        'status',
         'penghasilan_bruto_bulan',
         'penghasilan_disetahunkan',
         'bonus',
         'thr',
         'penghasilan_bruto',
         'pengurangan_biaya_jabatan',
-        'jumlah_penghasilan_neto_sebulan',
+        'jumlah_penghasilan_neto_setahun',
         'ptkp',
         'ptkp_disetahunkan',
         'pph_21',

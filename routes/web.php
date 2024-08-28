@@ -203,7 +203,10 @@ Route::middleware('auth', 'check.status:Aktif')->group(function () {
     Route::post('/pph-21/pusat/tambah-waktu', [PphController::class, 'store_waktu_pusat'])->name('pph.store_waktu_pusat');
     Route::delete('/pph-21/pusat/delete-waktu/{id}', [PphController::class, 'delete_waktu_pusat'])->name('pph.delete_waktu_pusat');
     Route::get('/pph-21/pusat/{id_waktu}', [PphController::class, 'index_pusat'])->name('pph.index_pusat');
-    Route::post('/pph-21/pusat/tambah-data', [PphController::class, 'store_pusat'])->name('pph.store_pusat');
+    Route::post('/pph-21/pusat/tambah-data/{id_waktu}', [PphController::class, 'store_pusat'])->name('pph.store_pusat');
+    Route::get('/pph-21/pusat/tambah-data/{id_waktu}/{id}', [PphController::class, 'waktu_detail_pusat'])->name('pph.waktu_detail_pusat');
+    Route::put('/pph-21/pusat/update-data/{id_waktu}/{id}', [PphController::class, 'update_waktu_detail_pusat'])->name('pph.update_waktu_detail_pusat');
+    Route::delete('/pph-21/pusat/hapus-semua-data/{id_waktu}', [PphController::class, 'delete_all_pusat'])->name('pph.delete_all_pusat');
 });
 Route::middleware('auth', 'check.status:Tidak Aktif')->group(function () {
     // Dashboard
