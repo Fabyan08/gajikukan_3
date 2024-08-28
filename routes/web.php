@@ -207,6 +207,12 @@ Route::middleware('auth', 'check.status:Aktif')->group(function () {
     Route::get('/pph-21/pusat/tambah-data/{id_waktu}/{id}', [PphController::class, 'waktu_detail_pusat'])->name('pph.waktu_detail_pusat');
     Route::put('/pph-21/pusat/update-data/{id_waktu}/{id}', [PphController::class, 'update_waktu_detail_pusat'])->name('pph.update_waktu_detail_pusat');
     Route::delete('/pph-21/pusat/hapus-semua-data/{id_waktu}', [PphController::class, 'delete_all_pusat'])->name('pph.delete_all_pusat');
+
+    // PPH Kantor Cabang
+    Route::get('/pph-21/{slug}', [PphController::class, 'index_cabang'])->name('pph.index_cabang');
+    Route::post('/pph-21/cabang/tambah-waktu/{slug}', [PphController::class, 'store_waktu_cabang'])->name('pph.store_waktu_cabang');
+    Route::delete('/pph-21/cabang/delete-waktu/{slug}/{id}', [PphController::class, 'delete_waktu_cabang'])->name('pph.delete_waktu_cabang');
+    Route::get('/pph-21/cabang/{slug}/{id_waktu}', [PphController::class, 'detail_cabang'])->name('pph.detail_cabang');
 });
 Route::middleware('auth', 'check.status:Tidak Aktif')->group(function () {
     // Dashboard

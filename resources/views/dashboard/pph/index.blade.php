@@ -144,7 +144,9 @@
                         @csrf
                         <div class="mt-4">
                             <label for="nama_tabel">Nama Tabel</label>
-                            <input type="text" class="form-control" name="nama_tabel" id="nama_tabel">
+                            <input type="text" class="form-control" name="nama_tabel" id="nama_tabel"
+                                oninput="this.value = this.value.toLowerCase();">
+                            <p>Harap isi dengan huruf kecil</p>
                         </div>
                         <div class="mt-4">
                             <button type="submit" class="btn btn-warning "><i class="fas fa-plus"></i>Tambah</button>

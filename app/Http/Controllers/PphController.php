@@ -37,7 +37,7 @@ class PphController extends Controller
     public function tambah_kantor(Request $request)
     {
         $request->validate([
-            'nama_tabel' => 'required|string|max:255',
+            'nama_tabel' => ['required', 'string', 'regex:/^[a-z_]+$/'], // Only lowercase and underscores allowed
         ]);
         // dd($request->all());
         $tableName = $request->input('nama_tabel');
@@ -76,6 +76,7 @@ class PphController extends Controller
     {
         $nama_tabel = request('table_name');
         Schema::dropIfExists('pph_' . $nama_tabel);
+        Schema::dropIfExists('waktu_pph_' . $nama_tabel);
         return redirect()->back()->with('success', 'Kantor deleted successfully');
     }
 
@@ -103,7 +104,7 @@ class PphController extends Controller
             'bulan' => $request->bulan,
             'tahun' => $request->tahun,
         ]);
-        return redirect()->back()->with('success', 'Data Waktu Berhasil Ditambahkan, Yuk Upload Slip Gaji Excel');
+        return redirect()->back()->with('success', 'Data Waktu Berhasil Ditambahkan, Yuk Upload Slip Gaji CSV');
     }
 
     public function delete_waktu_pusat($id)
@@ -214,5 +215,81 @@ class PphController extends Controller
         $pph = Pph::where('id_waktu', $id_waktu)->delete();
 
         return redirect()->back()->with('success', 'Data PPH Berhasil Dihapus');
+    }
+
+    // Kantor Cabang
+
+
+    public function index_cabang($slug)
+    {
+        // Construct table names dynamically
+        $pphTable = 'pph_' . $slug;
+        $waktuTable = 'waktu_pph_' . $slug;
+
+        // Check if tables exist
+        if (!Schema::hasTable($pphTable) || !Schema::hasTable($waktuTable)) {
+            return redirect()->back()->withErrors(['error' => 'Table not found.']);
+        }
+
+        // Retrieve data from the pph table
+        $pph = DB::table($pphTable)->get();
+
+        // Get the current year and range of years for dropdown
+        $currentYear = date('Y');
+        $startYear = $currentYear - 2;
+        $endYear = $currentYear + 2;
+        $years = range($startYear, $endYear);
+
+        // Retrieve and sort data from the waktu_pph table
+        $data_waktu = DB::table($waktuTable)->orderBy('id', 'desc')->get();
+
+        $kantor = strtolower($slug);
+
+        return view('dashboard.pph.cabang.index', compact('pph', 'years', 'data_waktu', 'kantor'));
+    }
+
+    public function store_waktu_cabang(Request $request)
+    {
+        $request->validate([
+            'bulan' => 'required|string',
+            'tahun' => 'required|string',
+            'tanggal' => 'required|date', // Ensu
+        ]);
+
+        DB::table('waktu_pph_' . $request->slug)->insert([
+            'tanggal' => $request->tanggal,
+            'bulan' => $request->bulan,
+            'tahun' => $request->tahun,
+        ]);
+        return redirect()->back()->with('success', 'Data Waktu Berhasil Ditambahkan, Yuk Upload Slip Gaji CSV');
+    }
+    public function delete_waktu_cabang($id, $slug)
+    {
+        $waktu = DB::table('waktu_pph_' . $id);
+        // dd($waktu, $id, $slug);
+
+        if (!$waktu) {
+            return redirect()->back()->with('error', 'Data Waktu Tidak Ditemukan');
+        }
+        // Check if the 'id_waktu' exists in the 'pph' table
+        $existsInPph = DB::table('pph_' . $id)->where('id_waktu', $id)->exists();
+
+        if ($existsInPph) {
+            // If it exists, don't delete and return with a warning
+            $waktu->delete();
+        }
+        // If 'id_waktu' does not exist in the 'pph' table, proceed with deletion
+
+        $delete_waktu_pph = DB::table('waktu_pph_' . $id)->where('id', $slug)->delete();
+
+        return redirect()->back()->with('success', 'Data Waktu Berhasil Dihapus');
+    }
+
+    public function detail_cabang($slug, $id_waktu)
+    {
+        $kantor = strtolower($slug);
+        $waktu = DB::table('waktu_pph_' . $slug)->find($id_waktu);
+        $pph = DB::table('pph_' . $slug)->where('id_waktu', $id_waktu)->get();
+        return view('dashboard.pph.cabang.waktu_detail', compact('waktu', 'pph', 'kantor'));
     }
 }
