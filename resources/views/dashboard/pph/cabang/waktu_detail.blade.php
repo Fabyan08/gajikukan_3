@@ -3,7 +3,7 @@
         <section class="section">
             <div class="section-header">
                 <div class="section-header-back">
-                    <a href="/pph-21/pusat" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+                    <a href="/pph-21/{{ $kantor }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
                 </div>
                 <h1 style="text-transform: capitalize">Data Ter-Upload CSV Kantor {{ $kantor }} Bulan
                     {{ $waktu->bulan }} Tahun
@@ -53,7 +53,8 @@
                                 </div>
 
                                 @if ($pph->isNotEmpty())
-                                    <form action="{{ route('pph.delete_all_pusat', ['id_waktu' => $waktu->id]) }}"
+                                    <form
+                                        action="{{ route('pph.delete_all_cabang', ['slug' => $kantor, 'id_waktu' => $waktu->id]) }}"
                                         method="POST">
                                         @csrf
                                         @method('delete')
@@ -96,7 +97,7 @@
                                                     <td>{{ $data->status }}</td>
                                                     <td>Rp{{ number_format($data->penghasilan_bruto_bulan, 2, ',', '.') }}
                                                     </td>
-                                                    <td><a href="{{ route('pph.waktu_detail_pusat', ['id_waktu' => $data->id_waktu, 'id' => $data->id]) }}"
+                                                    <td><a href="{{ route('pph.detail_data_cabang', ['slug' => $kantor, 'id_waktu' => $data->id_waktu, 'id' => $data->id]) }}"
                                                             class="btn btn-warning">Detail</a>
                                                     </td>
                                                     <td><a href="" class="btn btn-info">Print</a>
@@ -120,7 +121,8 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Import Slip Gaji Untuk Bulan {{ $waktu->bulan }} Tahun {{ $waktu->tahun }}
+                    <h5 class="modal-title">Import Data PPH Kantor {{ $kantor }} Untuk Bulan {{ $waktu->bulan }}
+                        Tahun {{ $waktu->tahun }}
                     </h5>
 
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -128,10 +130,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('pph.store_pusat', ['id_waktu' => $waktu->id]) }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="{{ route('pph.store_cabang', ['id_waktu' => $waktu->id, 'tableName' => $kantor]) }}"
+                        method="POST" enctype="multipart/form-data">
                         @csrf
-                        <label>Import Data Excel</label>
+                        <label>Import Data CSV</label>
                         <input type="file" class="form-control" name="file">
                         <button type="submit" class="btn btn-primary mt-4">Kirim</button>
                     </form>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\PphCabangImport;
 use App\Imports\PphImport;
 use App\Models\Pph;
 use App\Models\WaktuPph;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Excel;
+use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
 
 class PphController extends Controller
 {
@@ -291,5 +293,112 @@ class PphController extends Controller
         $waktu = DB::table('waktu_pph_' . $slug)->find($id_waktu);
         $pph = DB::table('pph_' . $slug)->where('id_waktu', $id_waktu)->get();
         return view('dashboard.pph.cabang.waktu_detail', compact('waktu', 'pph', 'kantor'));
+    }
+
+    public function store_cabang(Request $request, $id_waktu, $tableName)
+    {
+
+        $request->validate([
+            'file' => 'required|file|mimes:csv,xls,xlsx,txt', // Added max size validation
+        ]);
+
+        $file = $request->file('file');
+        FacadesExcel::import(new PphCabangImport($id_waktu, $tableName), $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data PPH Berhasil Ditambahkan');
+    }
+
+    public function detail_data_cabang($slug, $id, $id_waktu)
+    {
+        // Convert slug to lowercase to ensure consistency
+        $slug = strtolower($slug);
+
+        // Define dynamic table names
+        $pphTable = 'pph_' . $slug;
+        $waktuTable = 'waktu_pph_' . $slug;
+
+        // Check if tables exist (Optional, but recommended)
+        if (!Schema::hasTable($pphTable) || !Schema::hasTable($waktuTable)) {
+            return redirect()->back()->withErrors(['error' => 'Table not found.']);
+        }
+
+        // Fetch the data with the dynamic table names
+        $pph = DB::table($pphTable)
+            ->join($waktuTable, $waktuTable . '.id', '=', $pphTable . '.id_waktu')
+            ->where($waktuTable . '.id', $id)
+            ->where($pphTable . '.id', $id_waktu)
+            ->select(
+                $pphTable . '.*',
+                $waktuTable . '.*',
+                $waktuTable . '.id as id_waktu',
+                $pphTable . '.id as id_pph'
+            )
+            ->first();
+
+        $kantor = strtolower($slug);
+
+        // Return the view with the fetched data
+        return view('dashboard.pph.cabang.detail_data', compact('pph', 'kantor'));
+    }
+
+    public function update_detail_data_cabang(Request $request, $slug, $id, $id_waktu)
+    {
+        // Convert slug to lowercase to ensure consistency
+        $slug = strtolower($slug);
+
+        // Define the dynamic table name
+        $pphTable = 'pph_' . $slug;
+
+        // Validate the incoming request data
+        $request->validate([
+            'nama_pegawai' => 'required',
+            'status' => 'required',
+            'penghasilan_bruto_bulan' => 'required',
+            'penghasilan_disetahunkan' => 'required',
+            'bonus' => 'required',
+            'thr' => 'required',
+            'penghasilan_bruto' => 'required',
+            'pengurangan_biaya_jabatan' => 'required',
+            'jumlah_penghasilan_neto_setahun' => 'required',
+            'ptkp' => 'required',
+            'ptkp_disetahunkan' => 'required',
+            'pph_21' => 'required',
+            'iuran_per_bulan' => 'required',
+        ]);
+
+        // Retrieve the record from the dynamic table
+        $pph = DB::table($pphTable)->where('id', $id_waktu)->first();
+
+        if (!$pph) {
+            // Redirect back with an error if the record is not found
+            return redirect()->back()->with('error', 'Data PPH Tidak Ditemukan');
+        }
+
+        // Update the record using the Query Builder
+        DB::table($pphTable)->where('id', $id_waktu)->update([
+            'nama_pegawai' => $request->nama_pegawai,
+            'status' => $request->status,
+            'penghasilan_bruto_bulan' => $request->penghasilan_bruto_bulan,
+            'penghasilan_disetahunkan' => $request->penghasilan_disetahunkan,
+            'bonus' => $request->bonus,
+            'thr' => $request->thr,
+            'penghasilan_bruto' => $request->penghasilan_bruto,
+            'pengurangan_biaya_jabatan' => $request->pengurangan_biaya_jabatan,
+            'jumlah_penghasilan_neto_setahun' => $request->jumlah_penghasilan_neto_setahun,
+            'ptkp' => $request->ptkp,
+            'ptkp_disetahunkan' => $request->ptkp_disetahunkan,
+            'pph_21' => $request->pph_21,
+            'iuran_per_bulan' => $request->iuran_per_bulan,
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Data PPH Berhasil Di-update!');
+    }
+
+    public function delete_all_cabang(Request $request, $id_waktu, $slug)
+    {
+        $pph = DB::table('pph_' . $id_waktu)->where('id_waktu', $slug)->delete();
+
+        return redirect()->back()->with('success', 'Data PPH Berhasil Dihapus');
     }
 }

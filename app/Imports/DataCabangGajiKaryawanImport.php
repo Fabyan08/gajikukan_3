@@ -48,7 +48,7 @@ class DataCabangGajiKaryawanImport implements ToCollection
         $uploads = [];
 
         foreach ($mainCollection as $item) {
-              $user = [
+            $user = [
                 'id_waktu' => $this->id_waktu,
                 'nama' => $item[0] ?? 'Tidak Ditemukan',
                 'jabatan' => $item[1] ?? 'Tidak Ditemukan',

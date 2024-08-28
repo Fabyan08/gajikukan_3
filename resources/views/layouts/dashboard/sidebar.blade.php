@@ -51,13 +51,13 @@
                         <span>Kantor Cabang</span></a>
                 </li>
                 <li class="menu-header">Master Data</li>
-                <li class="{{ Request::is('chart-account') ? 'active' : '' }}">
-                    <a class="nav-link" href="/chart-account"><i class="fas fa-building"></i>
+                <li class="{{ Request::is('chart-account*') ? 'active' : '' }}">
+                    <a class="nav-link" href="/chart-account"><i class="fas fa-user-alt"></i>
                         <span>Chart of Account</span></a>
                 </li>
                 <li class="menu-header">PPH</li>
-                <li class="{{ Request::is('pph-21') ? 'active' : '' }}">
-                    <a class="nav-link" href="/pph-21"><i class="fas fa-building"></i>
+                <li class="{{ Request::is('pph-21*') ? 'active' : '' }}">
+                    <a class="nav-link" href="/pph-21"><i class="fas fa-money-bill-wave"></i>
                         <span>PPh 21</span></a>
                 </li>
                 <li class="menu-header">Laporaan</li>
