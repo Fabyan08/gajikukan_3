@@ -6,6 +6,7 @@ use App\Imports\PphCabangImport;
 use App\Imports\PphImport;
 use App\Models\Pph;
 use App\Models\WaktuPph;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -219,6 +220,53 @@ class PphController extends Controller
         return redirect()->back()->with('success', 'Data PPH Berhasil Dihapus');
     }
 
+    public function print_pusat($id_waktu)
+    {
+        $pph = DB::table('pph')->where('id_waktu', $id_waktu)
+            ->join('waktu_pph', 'waktu_pph.id', '=', 'pph.id_waktu')
+            ->select('pph.*', 'waktu_pph.*', 'waktu_pph.id as id_waktu', 'pph.id as id_pph')
+            ->get();
+        // Generate the URL for the original image file
+        $imagePath = ('img/logo.jpg');
+
+        // Open the original image
+        $originalImage = imagecreatefromjpeg($imagePath);
+
+        // Get the original image dimensions
+        $originalWidth = imagesx($originalImage);
+        $originalHeight = imagesy($originalImage);
+
+        // Define the desired width and height for the resized image
+        $newWidth = 100; // Adjust according to your requirements
+        $newHeight = 100; // Adjust according to your requirements
+
+        // Create a new image resource with the desired dimensions
+        $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Resize the original image to the new dimensions
+        imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+
+        // Save the resized image to a temporary file
+        $tempImagePath = tempnam(sys_get_temp_dir(), 'resized_image');
+        imagejpeg($resizedImage, $tempImagePath);
+
+        // Encode the resized image to base64
+        $imageData = base64_encode(file_get_contents($tempImagePath));
+        $imageSrc = 'data:image/jpeg;base64,' . $imageData; // Specify image type
+
+        // Clean up - delete the temporary file and destroy image resources
+        unlink($tempImagePath);
+        imagedestroy($originalImage);
+        imagedestroy($resizedImage);
+
+        $pdf = Pdf::loadView('dashboard.pph.print', [
+            'pph' => $pph,
+            'imageSrc' => $imageSrc,
+        ])->setPaper('a4', 'landscape'); // Pass $gaji as an array to the view
+
+        return $pdf->download('Data PPH 21-' . $pph[0]->bulan . '-' . $pph[0]->tahun . '.pdf');
+    }
+
     // Kantor Cabang
 
 
@@ -400,5 +448,56 @@ class PphController extends Controller
         $pph = DB::table('pph_' . $id_waktu)->where('id_waktu', $slug)->delete();
 
         return redirect()->back()->with('success', 'Data PPH Berhasil Dihapus');
+    }
+
+    public function print_cabang($id_waktu, $kantor)
+    {
+        $pph = DB::table('pph_' . $kantor)->where('id_waktu', $id_waktu)
+            ->join('waktu_pph_' . $kantor, 'waktu_pph_' . $kantor . '.id', '=', 'pph_' . $kantor . '.id_waktu')
+            ->select('pph_' . $kantor . '.*', 'waktu_pph_' . $kantor . '.*', 'waktu_pph_' . $kantor . '.id as id_waktu', 'pph_' . $kantor . '.id as id_pph')
+            ->get();
+        // Generate the URL for the original image file
+        $imagePath = ('img/logo.jpg');
+
+        // Open the original image
+        $originalImage = imagecreatefromjpeg($imagePath);
+
+        // Get the original image dimensions
+        $originalWidth = imagesx($originalImage);
+        $originalHeight = imagesy($originalImage);
+
+        // Define the desired width and height for the resized image
+        $newWidth = 100; // Adjust according to your requirements
+        $newHeight = 100; // Adjust according to your requirements
+
+        // Create a new image resource with the desired dimensions
+        $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Resize the original image to the new dimensions
+        imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+
+        // Save the resized image to a temporary file
+        $tempImagePath = tempnam(sys_get_temp_dir(), 'resized_image');
+        imagejpeg($resizedImage, $tempImagePath);
+
+        // Encode the resized image to base64
+        $imageData = base64_encode(file_get_contents($tempImagePath));
+        $imageSrc = 'data:image/jpeg;base64,' . $imageData; // Specify image type
+
+        // Clean up - delete the temporary file and destroy image resources
+        unlink($tempImagePath);
+        imagedestroy($originalImage);
+        imagedestroy($resizedImage);
+
+        $slug = $kantor;
+
+        $pdf = Pdf::loadView('dashboard.pph.cabang.print', [
+            'kantor ' => $kantor,
+            'slug' => $slug,
+            'pph' => $pph,
+            'imageSrc' => $imageSrc,
+        ])->setPaper('a4', 'landscape'); // Pass $gaji as an array to the view
+
+        return $pdf->download('Data PPH 21 ' . $kantor . '-' . $pph[0]->bulan . '-' . $pph[0]->tahun . '.pdf');
     }
 }

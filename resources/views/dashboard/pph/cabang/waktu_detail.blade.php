@@ -53,6 +53,10 @@
                                 </div>
 
                                 @if ($pph->isNotEmpty())
+                                    <a href="{{ route('pph.print_cabang', ['id_waktu' => $waktu->id, 'kantor' => $kantor]) }}"
+                                        style="height: fit-content;margin-right:20px"
+                                        class="btn btn-icon h-fit icon-left btn-success"><i class="fas fa-print"></i>
+                                        Print</a>
                                     <form
                                         action="{{ route('pph.delete_all_cabang', ['slug' => $kantor, 'id_waktu' => $waktu->id]) }}"
                                         method="POST">
@@ -86,7 +90,6 @@
                                                 <th>Status</th>
                                                 <th>Penghasilan Bruto / Bulan</th>
                                                 <th>Detail</th>
-                                                <th>PRINT SLIP GAJI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -100,7 +103,6 @@
                                                     <td><a href="{{ route('pph.detail_data_cabang', ['slug' => $kantor, 'id_waktu' => $data->id_waktu, 'id' => $data->id]) }}"
                                                             class="btn btn-warning">Detail</a>
                                                     </td>
-                                                    <td><a href="" class="btn btn-info">Print</a>
                                                 </tr>
                                             @endforeach
                                         </tbody>

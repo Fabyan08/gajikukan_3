@@ -36,9 +36,7 @@
             <div class="section-body">
                 <div>
                     <h2 class="section-title">Lihat & Print Data PPH {{ $pph->nama_pegawai }}</h2>
-                    <button type="button" data-toggle="modal" data-target="#edit-modal"
-                        class="btn btn-icon icon-left btn-info"><i class="fas fa-edit"></i>
-                        Edit Data</button>
+
                 </div>
 
                 <div class="row">
@@ -155,14 +153,10 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col">
-                                            <h4>PRINT PPH</h4>
-                                            <a href="" class="btn btn-warning">
-                                                <i class="fas fa-print"></i> Print
-                                            </a>
-                                            {{-- <a href="{{ route('kantor-cabang.gaji-karyawan.print', ['id_waktu' => $id_waktu, 'id' => $gaji->id, 'table_name' => $tableName]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-print"></i> Print
-                                            </a> --}}
+                                            <h4>EDIT DATA</h4>
+                                            <button type="button" data-toggle="modal" data-target="#edit-modal"
+                                                class="btn btn-icon icon-left btn-info"><i class="fas fa-edit"></i>
+                                                Edit Data</button>
 
                                         </div>
                                     </div>
